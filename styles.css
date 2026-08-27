@@ -171,6 +171,18 @@ h1 {
   letter-spacing: -0.02em;
 }
 
+.intro-definition {
+  margin-bottom: 16px;
+  color: var(--paper);
+  font-size: 19px;
+  line-height: 1.42;
+  letter-spacing: -0.015em;
+}
+
+.intro-instruction {
+  color: var(--copy);
+}
+
 .comparison-section {
   padding: 44px 0 80px;
   border-top: 1px solid var(--line);
