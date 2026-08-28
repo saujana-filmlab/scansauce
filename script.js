@@ -34,20 +34,28 @@ const styleButtons = [...document.querySelectorAll("[data-side][data-style]")];
 
 let sceneButtons = [];
 let pointerId = null;
+let contentVersion = "";
 
 function variant(scene, style, width) {
   return scene.styles?.[style]?.variants?.[String(width)] || null;
 }
 
+function versionedUrl(url) {
+  if (!url || !contentVersion) return url || "";
+  const parsed = new URL(url, window.location.href);
+  parsed.searchParams.set("v", contentVersion);
+  return parsed.href;
+}
+
 function availableUrl(file) {
-  return file?.jpg || file?.webp || "";
+  return versionedUrl(file?.jpg || file?.webp || "");
 }
 
 function srcsetFor(scene, style, format) {
   return [900, 1600]
     .map((width) => {
       const file = variant(scene, style, width);
-      const url = file?.[format] || (format === "jpg" ? file?.webp : null);
+      const url = versionedUrl(file?.[format] || (format === "jpg" ? file?.webp : null));
       return url ? `${url} ${width}w` : null;
     })
     .filter(Boolean)
@@ -184,6 +192,7 @@ async function loadContent() {
   if (!response.ok) throw new Error(`Content request failed with ${response.status}`);
 
   const manifest = await response.json();
+  contentVersion = manifest.updatedAt || String(Date.now());
   const comparisons = (manifest.comparisons || [])
     .filter((comparison) => comparison.published !== false)
     .filter((comparison) => STYLE_ORDER.every((style) => comparison.styles?.[style]))
