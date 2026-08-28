@@ -75,7 +75,7 @@ async function verifyPasscode(passcode) {
   const response = await fetch(`${API_BASE}/session`, { headers: authHeaders() });
   if (!response.ok) {
     adminPasscode = "";
-    throw new Error("That passcode was not accepted.");
+    throw new Error("Errrr, wrong key. Try again.");
   }
   return response.json();
 }
