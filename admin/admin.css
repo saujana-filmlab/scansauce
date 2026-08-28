@@ -24,6 +24,19 @@ body {
 button, input { font: inherit; }
 
 [hidden] { display: none !important; }
+.filter-definitions { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
 
 .gate-screen {
   display: grid;
@@ -52,16 +65,20 @@ button, input { font: inherit; }
 .gate-identity img {
   display: block;
   height: auto;
-  filter: invert(1) sepia(22%) saturate(650%) hue-rotate(323deg) brightness(103%) contrast(92%);
   mix-blend-mode: screen;
 }
 
-.gate-saujana-logo { width: 29%; margin: 0 auto 14px; }
-.gate-lockup { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); align-items: center; gap: 10px; }
-.gate-house-icon { width: 100%; }
+.gate-saujana-logo {
+  width: 29%;
+  margin: 0 auto 15px;
+  filter: invert(1) url("#gate-orange");
+}
+
+.gate-house-logo {
+  width: 100%;
+  filter: invert(1) url("#gate-paper");
+}
 .gate-index { margin: 0; color: var(--accent); font: 700 9px/1.4 var(--mono); letter-spacing: 0.12em; }
-.gate-card h1 { margin: 0; color: var(--paper); font-size: clamp(38px, 10vw, 64px); line-height: 0.78; letter-spacing: -0.065em; }
-.gate-card h1 span { display: block; }
 .gate-copy { max-width: 440px; margin: 20px 0 26px; color: var(--muted); font-size: 15px; line-height: 1.5; }
 .gate-copy strong { display: block; margin-bottom: 3px; color: var(--paper); font-size: 20px; line-height: 1.25; }
 .gate-copy span { display: block; }

@@ -10,14 +10,23 @@
     <link rel="stylesheet" href="admin.css" />
   </head>
   <body>
+    <svg class="filter-definitions" aria-hidden="true" width="0" height="0">
+      <defs>
+        <filter id="gate-orange" color-interpolation-filters="sRGB">
+          <feColorMatrix type="matrix" values="1.19 0 0 0 0  0 .444 0 0 0  0 0 .181 0 0  0 0 0 1 0" />
+        </filter>
+        <filter id="gate-paper" color-interpolation-filters="sRGB">
+          <feColorMatrix type="matrix" values=".9569 0 0 0 0  0 .8 0 0 0  0 0 .702 0 0  0 0 0 1 0" />
+        </filter>
+      </defs>
+    </svg>
+
     <section class="gate-screen" id="gate-screen" aria-labelledby="gate-title">
       <div class="gate-card">
         <div class="gate-identity" aria-label="Saujana Film Lab, The Sau House">
           <img class="gate-saujana-logo" src="../assets/saujana-logo.png" alt="Saujana Film Lab" />
-          <div class="gate-lockup">
-            <img class="gate-house-icon" src="../assets/sau-house-icon.png" alt="" />
-            <h1 id="gate-title"><span>THE</span><span>SAU</span><span>HOUSE</span></h1>
-          </div>
+          <img class="gate-house-logo" src="../assets/the-sau-house-logo.png" alt="" />
+          <h1 class="visually-hidden" id="gate-title">The Sau House</h1>
         </div>
         <p class="gate-index">SAUJANA CONTENT SYSTEM</p>
         <p class="gate-copy">
