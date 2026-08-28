@@ -1,40 +1,21 @@
-const SCENES = {
-  "01": {
-    label: "01",
-    alt: "ScanSAUce comparison photograph 01",
-  },
-  "02": {
-    label: "02",
-    alt: "ScanSAUce comparison photograph 02",
-  },
-  "03": {
-    label: "03",
-    alt: "ScanSAUce comparison photograph 03",
-  },
-};
+const WORKER_ORIGIN = "https://scansauce-content.saujanalab-bali.workers.dev";
+const CONTENT_URL = `${WORKER_ORIGIN}/content/comparisons.json`;
+const STYLE_ORDER = ["classic", "isle-punch", "flat"];
 
 const STYLES = {
-  classic: {
-    label: "CLASSIC",
-    alt: "Classic scan style",
-  },
-  flat: {
-    label: "FLAT",
-    alt: "Flat scan style",
-  },
-  "isle-punch": {
-    label: "ISLE PUNCH",
-    alt: "Isle Punch scan style",
-  },
+  classic: { label: "CLASSIC" },
+  "isle-punch": { label: "ISLE PUNCH" },
+  flat: { label: "FLAT" },
 };
 
 const state = {
-  scene: "01",
+  scene: null,
   leftStyle: "classic",
   rightStyle: "isle-punch",
   position: 50,
 };
 
+const scenes = new Map();
 const frame = document.querySelector("#comparison-frame");
 const slider = document.querySelector("#slider-control");
 const divider = document.querySelector("#divider");
@@ -48,21 +29,49 @@ const rightLabel = document.querySelector("#right-label");
 const leftData = document.querySelector("#data-left");
 const rightData = document.querySelector("#data-right");
 const sceneData = document.querySelector("#data-scene");
-const sceneButtons = [...document.querySelectorAll("[data-scene]")];
+const sceneThumbs = document.querySelector("#scene-thumbs");
 const styleButtons = [...document.querySelectorAll("[data-side][data-style]")];
 
+let sceneButtons = [];
 let pointerId = null;
 
-function assetPath(scene, style, width, format) {
-  return `assets/${style}-2026-08-27-${scene}-${width}.${format}`;
+function variant(scene, style, width) {
+  return scene.styles?.[style]?.variants?.[String(width)] || null;
 }
 
-function updatePicture(picture, image, scene, style) {
+function availableUrl(file) {
+  return file?.jpg || file?.webp || "";
+}
+
+function srcsetFor(scene, style, format) {
+  return [900, 1600]
+    .map((width) => {
+      const file = variant(scene, style, width);
+      const url = file?.[format] || (format === "jpg" ? file?.webp : null);
+      return url ? `${url} ${width}w` : null;
+    })
+    .filter(Boolean)
+    .join(", ");
+}
+
+function updatePicture(picture, image, sceneId, style) {
+  const scene = scenes.get(sceneId);
+  if (!scene || !scene.styles?.[style]) return;
+
   const source = picture.querySelector("source");
-  source.srcset = `${assetPath(scene, style, 900, "webp")} 900w, ${assetPath(scene, style, 1600, "webp")} 1600w`;
-  image.src = assetPath(scene, style, 1600, "jpg");
-  image.srcset = `${assetPath(scene, style, 900, "jpg")} 900w, ${assetPath(scene, style, 1600, "jpg")} 1600w`;
-  image.alt = `${SCENES[scene].alt}, interpreted with the ${style === "isle-punch" ? "Isle Punch" : style[0].toUpperCase() + style.slice(1)} scan style`;
+  const webpSrcset = srcsetFor(scene, style, "webp");
+  const fallbackSrcset = srcsetFor(scene, style, "jpg");
+  const large = variant(scene, style, 1600) || variant(scene, style, 900) || variant(scene, style, 320);
+
+  if (webpSrcset) {
+    source.srcset = webpSrcset;
+  } else {
+    source.removeAttribute("srcset");
+  }
+
+  image.src = availableUrl(large);
+  image.srcset = fallbackSrcset;
+  image.alt = `${scene.alt}, interpreted with the ${STYLES[style].label} scan style`;
 }
 
 function setPosition(nextPosition) {
@@ -83,6 +92,8 @@ function positionFromPointer(event) {
 }
 
 function setStyle(side, style) {
+  if (!STYLE_ORDER.includes(style) || !state.scene) return;
+
   if (side === "left") {
     state.leftStyle = style;
     updatePicture(leftPicture, leftImage, state.scene, style);
@@ -96,25 +107,74 @@ function setStyle(side, style) {
   }
 
   styleButtons.forEach((button) => {
-    const active = button.dataset.side === side && button.dataset.style === style;
     if (button.dataset.side !== side) return;
+    const active = button.dataset.style === style;
     button.classList.toggle("is-active", active);
     button.setAttribute("aria-pressed", String(active));
   });
   setPosition(state.position);
 }
 
-function setScene(scene) {
-  state.scene = scene;
-  updatePicture(leftPicture, leftImage, scene, state.leftStyle);
-  updatePicture(rightPicture, rightImage, scene, state.rightStyle);
-  sceneData.textContent = SCENES[scene].label;
+function setScene(sceneId) {
+  const scene = scenes.get(sceneId);
+  if (!scene) return;
+
+  state.scene = sceneId;
+  updatePicture(leftPicture, leftImage, sceneId, state.leftStyle);
+  updatePicture(rightPicture, rightImage, sceneId, state.rightStyle);
+  sceneData.textContent = scene.label;
   sceneButtons.forEach((button) => {
-    const active = button.dataset.scene === scene;
+    const active = button.dataset.scene === sceneId;
     button.classList.toggle("is-active", active);
     button.setAttribute("aria-pressed", String(active));
   });
   setPosition(50);
+}
+
+function makeSceneButton(scene, index) {
+  const button = document.createElement("button");
+  const image = document.createElement("img");
+  const label = document.createElement("span");
+  const thumbnail = variant(scene, "classic", 320);
+
+  button.className = "scene-thumb";
+  button.type = "button";
+  button.dataset.scene = scene.id;
+  button.setAttribute("aria-label", `Show photograph ${scene.label}`);
+  button.setAttribute("aria-pressed", "false");
+
+  image.src = availableUrl(thumbnail);
+  image.alt = scene.alt;
+  image.width = 320;
+  image.height = 320;
+  if (index > 0) image.loading = "lazy";
+
+  label.textContent = scene.label;
+  button.append(image, label);
+  button.addEventListener("click", () => setScene(scene.id));
+  return button;
+}
+
+function renderScenes(comparisons) {
+  scenes.clear();
+  comparisons.forEach((scene) => scenes.set(scene.id, scene));
+  sceneButtons = comparisons.map(makeSceneButton);
+  sceneThumbs.replaceChildren(...sceneButtons);
+  setScene(comparisons[0].id);
+}
+
+async function loadContent() {
+  const response = await fetch(CONTENT_URL, { cache: "no-store" });
+  if (!response.ok) throw new Error(`Content request failed with ${response.status}`);
+
+  const manifest = await response.json();
+  const comparisons = (manifest.comparisons || [])
+    .filter((comparison) => comparison.published !== false)
+    .filter((comparison) => STYLE_ORDER.every((style) => comparison.styles?.[style]))
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  if (!comparisons.length) throw new Error("No published ScanSAUce comparisons were found");
+  renderScenes(comparisons);
 }
 
 slider.addEventListener("pointerdown", (event) => {
@@ -160,12 +220,12 @@ slider.addEventListener("keydown", (event) => {
   }
 });
 
-sceneButtons.forEach((button) => {
-  button.addEventListener("click", () => setScene(button.dataset.scene));
-});
-
 styleButtons.forEach((button) => {
   button.addEventListener("click", () => setStyle(button.dataset.side, button.dataset.style));
 });
 
 setPosition(50);
+loadContent().catch((error) => {
+  console.error(error);
+  sceneThumbs.innerHTML = '<p class="content-error">Comparison photos are temporarily unavailable.</p>';
+});

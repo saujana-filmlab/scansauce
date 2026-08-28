@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-08-28T00:00:00.000Z",
+  "comparisons": [
+    {
+      "id": "2026-08-27-01",
+      "label": "01",
+      "date": "2026-08-27",
+      "order": 1,
+      "published": true,
+      "alt": "ScanSAUce comparison photograph 01",
+      "styles": {
+        "classic": {
+          "variants": {
+            "320": { "webp": "assets/classic-2026-08-27-01-320.webp", "jpg": "assets/classic-2026-08-27-01-320.jpg" },
+            "900": { "webp": "assets/classic-2026-08-27-01-900.webp", "jpg": "assets/classic-2026-08-27-01-900.jpg" },
+            "1600": { "webp": "assets/classic-2026-08-27-01-1600.webp", "jpg": "assets/classic-2026-08-27-01-1600.jpg" }
+          }
+        },
+        "isle-punch": {
+          "variants": {
+            "320": { "webp": "assets/isle-punch-2026-08-27-01-320.webp", "jpg": "assets/isle-punch-2026-08-27-01-320.jpg" },
+            "900": { "webp": "assets/isle-punch-2026-08-27-01-900.webp", "jpg": "assets/isle-punch-2026-08-27-01-900.jpg" },
+            "1600": { "webp": "assets/isle-punch-2026-08-27-01-1600.webp", "jpg": "assets/isle-punch-2026-08-27-01-1600.jpg" }
+          }
+        },
+        "flat": {
+          "variants": {
+            "320": { "webp": "assets/flat-2026-08-27-01-320.webp", "jpg": "assets/flat-2026-08-27-01-320.jpg" },
+            "900": { "webp": "assets/flat-2026-08-27-01-900.webp", "jpg": "assets/flat-2026-08-27-01-900.jpg" },
+            "1600": { "webp": "assets/flat-2026-08-27-01-1600.webp", "jpg": "assets/flat-2026-08-27-01-1600.jpg" }
+          }
+        }
+      }
+    },
+    {
+      "id": "2026-08-27-02",
+      "label": "02",
+      "date": "2026-08-27",
+      "order": 2,
+      "published": true,
+      "alt": "ScanSAUce comparison photograph 02",
+      "styles": {
+        "classic": {
+          "variants": {
+            "320": { "webp": "assets/classic-2026-08-27-02-320.webp", "jpg": "assets/classic-2026-08-27-02-320.jpg" },
+            "900": { "webp": "assets/classic-2026-08-27-02-900.webp", "jpg": "assets/classic-2026-08-27-02-900.jpg" },
+            "1600": { "webp": "assets/classic-2026-08-27-02-1600.webp", "jpg": "assets/classic-2026-08-27-02-1600.jpg" }
+          }
+        },
+        "isle-punch": {
+          "variants": {
+            "320": { "webp": "assets/isle-punch-2026-08-27-02-320.webp", "jpg": "assets/isle-punch-2026-08-27-02-320.jpg" },
+            "900": { "webp": "assets/isle-punch-2026-08-27-02-900.webp", "jpg": "assets/isle-punch-2026-08-27-02-900.jpg" },
+            "1600": { "webp": "assets/isle-punch-2026-08-27-02-1600.webp", "jpg": "assets/isle-punch-2026-08-27-02-1600.jpg" }
+          }
+        },
+        "flat": {
+          "variants": {
+            "320": { "webp": "assets/flat-2026-08-27-02-320.webp", "jpg": "assets/flat-2026-08-27-02-320.jpg" },
+            "900": { "webp": "assets/flat-2026-08-27-02-900.webp", "jpg": "assets/flat-2026-08-27-02-900.jpg" },
+            "1600": { "webp": "assets/flat-2026-08-27-02-1600.webp", "jpg": "assets/flat-2026-08-27-02-1600.jpg" }
+          }
+        }
+      }
+    },
+    {
+      "id": "2026-08-27-03",
+      "label": "03",
+      "date": "2026-08-27",
+      "order": 3,
+      "published": true,
+      "alt": "ScanSAUce comparison photograph 03",
+      "styles": {
+        "classic": {
+          "variants": {
+            "320": { "webp": "assets/classic-2026-08-27-03-320.webp", "jpg": "assets/classic-2026-08-27-03-320.jpg" },
+            "900": { "webp": "assets/classic-2026-08-27-03-900.webp", "jpg": "assets/classic-2026-08-27-03-900.jpg" },
+            "1600": { "webp": "assets/classic-2026-08-27-03-1600.webp", "jpg": "assets/classic-2026-08-27-03-1600.jpg" }
+          }
+        },
+        "isle-punch": {
+          "variants": {
+            "320": { "webp": "assets/isle-punch-2026-08-27-03-320.webp", "jpg": "assets/isle-punch-2026-08-27-03-320.jpg" },
+            "900": { "webp": "assets/isle-punch-2026-08-27-03-900.webp", "jpg": "assets/isle-punch-2026-08-27-03-900.jpg" },
+            "1600": { "webp": "assets/isle-punch-2026-08-27-03-1600.webp", "jpg": "assets/isle-punch-2026-08-27-03-1600.jpg" }
+          }
+        },
+        "flat": {
+          "variants": {
+            "320": { "webp": "assets/flat-2026-08-27-03-320.webp", "jpg": "assets/flat-2026-08-27-03-320.jpg" },
+            "900": { "webp": "assets/flat-2026-08-27-03-900.webp", "jpg": "assets/flat-2026-08-27-03-900.jpg" },
+            "1600": { "webp": "assets/flat-2026-08-27-03-1600.webp", "jpg": "assets/flat-2026-08-27-03-1600.jpg" }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -233,6 +233,21 @@ h1 {
   text-align: center;
 }
 
+#scene-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.content-error {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font: 700 8px/1.4 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .scene-thumb {
   position: relative;
   width: 76px;

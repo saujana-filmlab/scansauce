@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#180b06" />
+    <title>Saujana Back of House</title>
+    <link rel="icon" type="image/png" href="../assets/scansauce-thumbnail.png" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <section class="gate-screen" id="gate-screen" aria-labelledby="gate-title">
+      <div class="gate-card">
+        <img src="../assets/scansauce-logo.png" alt="ScanSAUce" />
+        <p class="gate-index">SAUJANA CONTENT SYSTEM</p>
+        <h1 id="gate-title">BACK OF<br />HOUSE.</h1>
+        <p class="gate-copy">Staff only. Enter the kitchen passcode to continue.</p>
+        <form id="gate-form">
+          <label>
+            <span>PASSCODE</span>
+            <input id="gate-passcode" type="password" autocomplete="current-password" required />
+          </label>
+          <button type="submit">ENTER</button>
+        </form>
+        <button class="preview-button" id="preview-button" type="button" hidden>PREVIEW ROOMS LOCALLY</button>
+        <p class="gate-result" id="gate-result" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <div class="admin-shell" id="admin-shell" hidden>
+      <header class="admin-header">
+        <button class="brand-button" type="button" data-open-view="lobby" aria-label="Open the room directory">
+          <img src="../assets/scansauce-logo.png" alt="ScanSAUce" />
+        </button>
+        <div class="header-tools">
+          <div>
+            <p>SAUJANA CONTENT SYSTEM</p>
+            <strong id="session-label">BACK OF HOUSE</strong>
+          </div>
+          <button id="lock-button" type="button">LOCK</button>
+        </div>
+      </header>
+
+      <nav class="room-nav" aria-label="Admin rooms">
+        <button type="button" data-open-view="lobby">ROOMS</button>
+        <button type="button" data-open-view="kitchen">THE KITCHEN</button>
+        <button type="button" data-open-view="library">THE LIBRARY</button>
+      </nav>
+
+      <main>
+        <section class="status-panel" id="status-panel" aria-live="polite">
+          <span class="status-dot"></span>
+          <div>
+            <strong id="status-title">CHECKING CONNECTION</strong>
+            <p id="status-message">Looking for the Saujana content API.</p>
+          </div>
+        </section>
+
+        <section class="view-section lobby-view" data-view="lobby">
+          <div class="lobby-heading">
+            <p class="gate-index">CHOOSE A ROOM</p>
+            <h2>WHERE ARE<br />WE WORKING?</h2>
+          </div>
+          <div class="room-grid">
+            <button class="room-card kitchen-card" type="button" data-open-view="kitchen">
+              <span>01 / SCANSAUCE</span>
+              <strong>THE<br />KITCHEN</strong>
+              <p>Prepare, compare, and publish the three ScanSAUce interpretations.</p>
+              <b>ENTER THE KITCHEN →</b>
+            </button>
+            <button class="room-card library-card" type="button" data-open-view="library">
+              <span>02 / FILM CATALOGUE</span>
+              <strong>THE<br />LIBRARY</strong>
+              <p>Build the film stock catalogue, example rolls, notes, and credits.</p>
+              <b>VIEW THE LIBRARY →</b>
+            </button>
+          </div>
+        </section>
+
+        <section class="view-section" data-view="kitchen" hidden>
+          <div class="room-heading">
+            <div>
+              <p class="gate-index">01 / SCANSAUCE ROOM</p>
+              <h2>THE KITCHEN</h2>
+            </div>
+            <p>Bring one negative in three styles. The Kitchen handles the resizing, filenames, R2 upload, and publication record.</p>
+          </div>
+
+          <div class="admin-grid">
+            <div class="workspace">
+              <div class="section-title">
+                <span>01</span>
+                <div>
+                  <p>NEW PLATE</p>
+                  <h3>ADD A COMPARISON</h3>
+                </div>
+              </div>
+
+              <form id="comparison-form">
+                <div class="form-row">
+                  <label>
+                    <span>SHOOT DATE</span>
+                    <input id="shoot-date" name="date" type="date" required />
+                  </label>
+                  <label>
+                    <span>FRAME LABEL</span>
+                    <input id="frame-label" name="label" type="text" inputmode="numeric" maxlength="2" placeholder="AUTO" />
+                  </label>
+                </div>
+
+                <p class="form-help">
+                  Pick the same negative in all three scan styles. The Kitchen creates web-ready image sizes and structured filenames automatically.
+                </p>
+
+                <div class="upload-grid">
+                  <label class="upload-card">
+                    <span class="upload-number">01</span>
+                    <strong>CLASSIC</strong>
+                    <span class="upload-preview"><span>CHOOSE PHOTO</span></span>
+                    <input name="classic" type="file" accept="image/jpeg,image/png,image/webp" required />
+                  </label>
+                  <label class="upload-card">
+                    <span class="upload-number">02</span>
+                    <strong>ISLE PUNCH</strong>
+                    <span class="upload-preview"><span>CHOOSE PHOTO</span></span>
+                    <input name="isle-punch" type="file" accept="image/jpeg,image/png,image/webp" required />
+                  </label>
+                  <label class="upload-card">
+                    <span class="upload-number">03</span>
+                    <strong>FLAT</strong>
+                    <span class="upload-preview"><span>CHOOSE PHOTO</span></span>
+                    <input name="flat" type="file" accept="image/jpeg,image/png,image/webp" required />
+                  </label>
+                </div>
+
+                <div class="publish-row">
+                  <label class="publish-check">
+                    <input id="published" type="checkbox" checked />
+                    <span>Publish immediately</span>
+                  </label>
+                  <button id="publish-button" type="submit">PROCESS AND UPLOAD</button>
+                </div>
+                <progress id="upload-progress" value="0" max="100" hidden></progress>
+                <p class="form-result" id="form-result" aria-live="polite"></p>
+              </form>
+            </div>
+
+            <aside class="library-panel">
+              <div class="section-title compact">
+                <span>02</span>
+                <div>
+                  <p>ON THE PASS</p>
+                  <h3>LIVE FRAMES</h3>
+                </div>
+              </div>
+              <div id="comparison-list" class="comparison-list">
+                <p class="empty-state">Loading the current manifest.</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view-section" data-view="library" hidden>
+          <div class="room-heading library-heading">
+            <div>
+              <p class="gate-index">02 / FILM CATALOGUE ROOM</p>
+              <h2>THE LIBRARY</h2>
+            </div>
+            <p>The shelves are being planned now so film details and ScanSAUce examples can connect cleanly later.</p>
+          </div>
+
+          <div class="library-blueprint">
+            <article>
+              <span>01</span>
+              <h3>FILM STOCKS</h3>
+              <p>Name, process, format, speed, manufacturer, availability, and Saujana notes.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>EXAMPLE ROLLS</h3>
+              <p>Multiple frames, lighting conditions, cameras, lenses, and photographers.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>SCANSAUCE LINKS</h3>
+              <p>Connect selected film examples back to Classic, Isle Punch, and Flat comparisons.</p>
+            </article>
+            <article>
+              <span>04</span>
+              <h3>CREDITS</h3>
+              <p>Photographer permissions, captions, social handles, and publication status.</p>
+            </article>
+          </div>
+          <div class="coming-soon">
+            <strong>ROOM STATUS</strong>
+            <span>PLANNED / NOT YET ACCEPTING ENTRIES</span>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

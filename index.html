@@ -91,53 +91,7 @@
         <div class="comparison-layout">
           <div class="scene-rail" aria-label="Choose a photograph">
             <span class="rail-label">FRAME SELECT</span>
-            <button
-              class="scene-thumb is-active"
-              type="button"
-              data-scene="01"
-              aria-label="Show photograph 01"
-              aria-pressed="true"
-            >
-              <img
-                src="assets/classic-2026-08-27-01-320.jpg"
-                alt="ScanSAUce comparison photograph 01"
-                width="320"
-                height="482"
-              />
-              <span>01</span>
-            </button>
-            <button
-              class="scene-thumb"
-              type="button"
-              data-scene="02"
-              aria-label="Show photograph 02"
-              aria-pressed="false"
-            >
-              <img
-                src="assets/classic-2026-08-27-02-320.jpg"
-                alt="ScanSAUce comparison photograph 02"
-                width="320"
-                height="482"
-                loading="lazy"
-              />
-              <span>02</span>
-            </button>
-            <button
-              class="scene-thumb"
-              type="button"
-              data-scene="03"
-              aria-label="Show photograph 03"
-              aria-pressed="false"
-            >
-              <img
-                src="assets/classic-2026-08-27-03-320.jpg"
-                alt="ScanSAUce comparison photograph 03"
-                width="320"
-                height="483"
-                loading="lazy"
-              />
-              <span>03</span>
-            </button>
+            <div id="scene-thumbs"></div>
           </div>
 
           <div class="comparison-frame" id="comparison-frame">
