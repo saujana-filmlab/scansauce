@@ -26,6 +26,10 @@ class MemoryR2 {
       },
     };
   }
+
+  async delete(keys) {
+    for (const key of Array.isArray(keys) ? keys : [keys]) this.objects.delete(key);
+  }
 }
 
 function adminRequest(path, options = {}) {
@@ -84,4 +88,16 @@ test("uploads a complete comparison and serves its manifest", async () => {
   const manifest = await manifestResponse.json();
   assert.equal(manifest.comparisons.length, 1);
   assert.equal(manifest.comparisons[0].styles.flat.variants["1600"].webp, "https://scansauce.saujanalab.com/content/media/scansauce/comparisons/2026-08-28-04/flat/1600.webp");
+
+  const remove = await worker.fetch(adminRequest("/api/admin/comparisons/2026-08-28-04", {
+    method: "DELETE",
+  }), env);
+  assert.equal(remove.status, 200);
+  const removed = await remove.json();
+  assert.equal(removed.manifest.comparisons.length, 0);
+  assert.equal(env.MEDIA.objects.has("scansauce/comparisons/2026-08-28-04/flat/1600.webp"), false);
+
+  const deletedManifestResponse = await worker.fetch(new Request("https://scansauce.saujanalab.com/content/comparisons.json"), env);
+  const deletedManifest = await deletedManifestResponse.json();
+  assert.equal(deletedManifest.comparisons.length, 0);
 });

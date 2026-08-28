@@ -134,18 +134,64 @@ function renderList() {
       const title = document.createElement("strong");
       const meta = document.createElement("span");
       const image = document.createElement("img");
+      const actions = document.createElement("div");
+      const remove = document.createElement("button");
       item.className = "comparison-item";
+      actions.className = "comparison-item-actions";
       title.textContent = `FRAME ${comparison.label}`;
       meta.textContent = `${comparison.date} / ${comparison.published === false ? "HIDDEN" : "LIVE"}`;
       image.src = imageUrl(comparison);
       image.alt = "";
       image.loading = "lazy";
+      remove.className = "comparison-remove";
+      remove.type = "button";
+      remove.textContent = "REMOVE";
+      remove.dataset.removeId = comparison.id;
+      remove.dataset.removeLabel = comparison.label;
+      remove.setAttribute("aria-label", `Remove frame ${comparison.label}`);
+      remove.disabled = !adminPasscode;
       copy.append(title, meta);
-      item.append(copy, image);
+      actions.append(image, remove);
+      item.append(copy, actions);
       return item;
     }),
   );
 }
+
+async function removeComparison(id, label, button) {
+  if (!adminPasscode) {
+    setResult("Enter the production passcode before removing a frame.", "error");
+    return;
+  }
+
+  const confirmed = window.confirm(`Remove frame ${label}? Its processed photos will also be deleted from R2.`);
+  if (!confirmed) return;
+
+  button.disabled = true;
+  button.textContent = "REMOVING";
+  setResult(`Removing frame ${label}.`);
+  try {
+    const response = await fetch(`${API_BASE}/comparisons/${encodeURIComponent(id)}`, {
+      method: "DELETE",
+      headers: authHeaders(),
+    });
+    if (!response.ok) throw new Error(await response.text() || `Removal failed (${response.status})`);
+    const saved = await response.json();
+    manifest = saved.manifest;
+    renderList();
+    setResult(`Frame ${label} and its processed photos have been removed.`, "success");
+  } catch (error) {
+    button.disabled = false;
+    button.textContent = "REMOVE";
+    setResult(error.message, "error");
+  }
+}
+
+list.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-remove-id]");
+  if (!button) return;
+  removeComparison(button.dataset.removeId, button.dataset.removeLabel, button);
+});
 
 async function loadManifest() {
   try {
@@ -176,6 +222,44 @@ function previewFile(input) {
   card.classList.add("has-file");
 }
 
+function assignDroppedFile(input, file) {
+  if (!file?.type.startsWith("image/")) {
+    setResult("Drop a JPEG, PNG, or WebP image into the upload tile.", "error");
+    return;
+  }
+
+  const transfer = new DataTransfer();
+  transfer.items.add(file);
+  input.files = transfer.files;
+  previewFile(input);
+  setResult(`${file.name} is ready.`);
+}
+
+document.querySelectorAll(".upload-card").forEach((card) => {
+  const input = card.querySelector('input[type="file"]');
+
+  card.addEventListener("dragenter", (event) => {
+    event.preventDefault();
+    card.classList.add("is-dragging");
+  });
+
+  card.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = "copy";
+    card.classList.add("is-dragging");
+  });
+
+  card.addEventListener("dragleave", (event) => {
+    if (!card.contains(event.relatedTarget)) card.classList.remove("is-dragging");
+  });
+
+  card.addEventListener("drop", (event) => {
+    event.preventDefault();
+    card.classList.remove("is-dragging");
+    assignDroppedFile(input, event.dataTransfer?.files?.[0]);
+  });
+});
+
 async function makeWebp(file, maxWidth) {
   const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
   const scale = Math.min(1, maxWidth / bitmap.width);
@@ -190,6 +274,13 @@ async function makeWebp(file, maxWidth) {
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("Could not process an image")), "image/webp", 0.95);
   });
+}
+
+async function imageDimensions(file) {
+  const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+  const dimensions = { width: bitmap.width, height: bitmap.height };
+  bitmap.close();
+  return dimensions;
 }
 
 async function uploadVariant(id, style, width, blob) {
@@ -253,6 +344,7 @@ form.addEventListener("submit", async (event) => {
 
   try {
     const styles = {};
+    const sourceFiles = {};
     const onStep = () => {
       completedSteps += 1;
       progress.value = Math.round((completedSteps / totalSteps) * 100);
@@ -262,7 +354,18 @@ form.addEventListener("submit", async (event) => {
     for (const style of STYLES) {
       const file = data.get(style);
       if (!(file instanceof File) || !file.size) throw new Error(`Choose the ${style} scan first.`);
-      styles[style] = await prepareStyle(id, style, file, onStep);
+      sourceFiles[style] = file;
+    }
+
+    const dimensions = await Promise.all(STYLES.map((style) => imageDimensions(sourceFiles[style])));
+    const [reference] = dimensions;
+    const referenceRatio = reference.width / reference.height;
+    if (dimensions.some(({ width, height }) => Math.abs((width / height) - referenceRatio) > 0.02)) {
+      throw new Error("The three scan styles need to use the same frame shape.");
+    }
+
+    for (const style of STYLES) {
+      styles[style] = await prepareStyle(id, style, sourceFiles[style], onStep);
     }
 
     const comparison = {
@@ -272,6 +375,12 @@ form.addEventListener("submit", async (event) => {
       order: Math.max(0, ...(manifest.comparisons || []).map((item) => item.order || 0)) + 1,
       published: document.querySelector("#published").checked,
       alt: `ScanSAUce comparison photograph ${label}`,
+      media: {
+        width: reference.width,
+        height: reference.height,
+        aspectRatio: Number(referenceRatio.toFixed(5)),
+        orientation: reference.width > reference.height ? "landscape" : reference.width < reference.height ? "portrait" : "square",
+      },
       styles,
     };
 
@@ -281,7 +390,7 @@ form.addEventListener("submit", async (event) => {
     form.reset();
     dateInput.value = localDateValue();
     document.querySelectorAll(".upload-card").forEach((card) => card.classList.remove("has-file"));
-    document.querySelectorAll(".upload-preview").forEach((preview) => { preview.innerHTML = "<span>CHOOSE PHOTO</span>"; });
+    document.querySelectorAll(".upload-preview").forEach((preview) => { preview.innerHTML = "<span>CHOOSE OR DROP PHOTO</span>"; });
     progress.value = 100;
     setResult(`Frame ${label} is ${comparison.published ? "live" : "saved as hidden"}.`, "success");
   } catch (error) {

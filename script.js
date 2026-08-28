@@ -54,6 +54,14 @@ function srcsetFor(scene, style, format) {
     .join(", ");
 }
 
+function applyFrameAspect(scene, image = null) {
+  let ratio = Number(scene.media?.aspectRatio);
+  if ((!Number.isFinite(ratio) || ratio <= 0) && image?.naturalWidth && image?.naturalHeight) {
+    ratio = image.naturalWidth / image.naturalHeight;
+  }
+  if (Number.isFinite(ratio) && ratio > 0) frame.style.aspectRatio = String(ratio);
+}
+
 function updatePicture(picture, image, sceneId, style) {
   const scene = scenes.get(sceneId);
   if (!scene || !scene.styles?.[style]) return;
@@ -62,6 +70,11 @@ function updatePicture(picture, image, sceneId, style) {
   const webpSrcset = srcsetFor(scene, style, "webp");
   const fallbackSrcset = srcsetFor(scene, style, "jpg");
   const large = variant(scene, style, 1600) || variant(scene, style, 900) || variant(scene, style, 320);
+  const syncAspect = () => {
+    if (state.scene === sceneId) applyFrameAspect(scene, image);
+  };
+
+  image.addEventListener("load", syncAspect, { once: true });
 
   if (webpSrcset) {
     source.srcset = webpSrcset;
@@ -72,6 +85,7 @@ function updatePicture(picture, image, sceneId, style) {
   image.src = availableUrl(large);
   image.srcset = fallbackSrcset;
   image.alt = `${scene.alt}, interpreted with the ${STYLES[style].label} scan style`;
+  if (image.complete) syncAspect();
 }
 
 function setPosition(nextPosition) {
@@ -120,6 +134,8 @@ function setScene(sceneId) {
   if (!scene) return;
 
   state.scene = sceneId;
+  frame.style.removeProperty("aspect-ratio");
+  applyFrameAspect(scene);
   updatePicture(leftPicture, leftImage, sceneId, state.leftStyle);
   updatePicture(rightPicture, rightImage, sceneId, state.rightStyle);
   sceneData.textContent = scene.label;

@@ -251,6 +251,7 @@ h1 {
 .scene-thumb {
   position: relative;
   width: 76px;
+  aspect-ratio: 1;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -261,18 +262,25 @@ h1 {
 }
 
 .scene-thumb img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  aspect-ratio: 1;
+  height: 100%;
   object-fit: cover;
   filter: saturate(0.72) brightness(0.72);
   transition: filter 160ms ease;
 }
 
 .scene-thumb span {
+  position: absolute;
+  z-index: 1;
+  right: 5px;
+  bottom: 5px;
   display: block;
-  padding: 7px 5px 6px;
-  color: var(--muted);
+  padding: 5px 6px 4px;
+  color: var(--paper);
+  background: rgba(9, 4, 3, 0.78);
   font: 700 7px/1 var(--mono);
   letter-spacing: 0.1em;
 }
@@ -314,7 +322,7 @@ h1 {
 
 .image-layer img {
   display: block;
-  object-fit: cover;
+  object-fit: contain;
   pointer-events: none;
 }
 
@@ -754,11 +762,6 @@ h1 {
 
   .scene-thumb {
     width: 70px;
-  }
-
-  .scene-thumb img {
-    height: auto;
-    aspect-ratio: 1;
   }
 
   .styles-section {

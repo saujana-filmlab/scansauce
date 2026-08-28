@@ -39,6 +39,10 @@ export default {
       if (request.method === "POST" && url.pathname === "/api/admin/comparisons") {
         return saveComparison(request, env);
       }
+
+      if (request.method === "DELETE" && url.pathname.startsWith("/api/admin/comparisons/")) {
+        return deleteComparison(env, url);
+      }
     }
 
     return json({ error: "Not found" }, 404);
@@ -49,7 +53,7 @@ function commonHeaders() {
   return {
     "Access-Control-Allow-Origin": "https://scansauce.saujanalab.com",
     "Access-Control-Allow-Headers": "Authorization, Content-Type",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "X-Content-Type-Options": "nosniff",
   };
 }
@@ -183,5 +187,36 @@ async function saveComparison(request, env) {
   await env.MEDIA.put(MANIFEST_KEY, JSON.stringify(manifest, null, 2), {
     httpMetadata: { contentType: "application/json; charset=utf-8", cacheControl: "no-cache, max-age=0" },
   });
+  return json({ ok: true, manifest });
+}
+
+async function deleteComparison(env, url) {
+  const encodedId = url.pathname.slice("/api/admin/comparisons/".length);
+  let id;
+  try {
+    id = decodeURIComponent(encodedId);
+  } catch {
+    return json({ error: "Invalid comparison ID" }, 400);
+  }
+
+  if (!/^\d{4}-\d{2}-\d{2}-\d{2}$/.test(id)) {
+    return json({ error: "Invalid comparison ID" }, 400);
+  }
+
+  const manifest = await loadManifest(env);
+  const comparison = manifest.comparisons.find((item) => item.id === id);
+  if (!comparison) return json({ error: "Comparison not found" }, 404);
+
+  manifest.comparisons = manifest.comparisons.filter((item) => item.id !== id);
+  manifest.updatedAt = new Date().toISOString();
+  await env.MEDIA.put(MANIFEST_KEY, JSON.stringify(manifest, null, 2), {
+    httpMetadata: { contentType: "application/json; charset=utf-8", cacheControl: "no-cache, max-age=0" },
+  });
+
+  const assetKeys = [...STYLE_KEYS].flatMap((style) =>
+    [...IMAGE_NAMES].map((filename) => `scansauce/comparisons/${id}/${style}/${filename}`),
+  );
+  await env.MEDIA.delete(assetKeys);
+
   return json({ ok: true, manifest });
 }
