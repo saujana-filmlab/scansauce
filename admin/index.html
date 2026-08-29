@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#180b06" />
     <title>The Sau House | Saujana Content System</title>
     <link rel="icon" type="image/png" href="../assets/scansauce-thumbnail.png" />
-    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="admin.css?v=3" />
   </head>
   <body>
     <svg class="filter-definitions" aria-hidden="true" width="0" height="0">
@@ -47,20 +47,17 @@
 
     <div class="admin-shell" id="admin-shell" hidden>
       <header class="admin-header">
-        <button class="brand-button" type="button" data-open-view="lobby" aria-label="Open the room directory">
-          <img src="../assets/scansauce-logo.png" alt="ScanSAUce" />
+        <button class="brand-button" type="button" data-open-view="lobby" aria-label="Open The House">
+          <img class="admin-house-logo" src="../assets/the-sau-house-logo.png" alt="The Sau House" />
         </button>
         <div class="header-tools">
-          <div>
-            <p>SAUJANA CONTENT SYSTEM</p>
-            <strong id="session-label">BACK OF HOUSE</strong>
-          </div>
+          <p>SAUJANA CONTENT SYSTEM</p>
           <button id="lock-button" type="button">LOCK</button>
         </div>
       </header>
 
       <nav class="room-nav" aria-label="Admin rooms">
-        <button type="button" data-open-view="lobby">ROOMS</button>
+        <button type="button" data-open-view="lobby">THE HOUSE</button>
         <button type="button" data-open-view="kitchen">THE KITCHEN</button>
         <button type="button" data-open-view="library">THE LIBRARY</button>
       </nav>
@@ -81,15 +78,15 @@
           </div>
           <div class="room-grid">
             <button class="room-card kitchen-card" type="button" data-open-view="kitchen">
-              <span>01 / SCANSAUCE</span>
+              <span class="scan-room-index">01 / <img src="../assets/scansauce-logo.png" alt="ScanSAUce" /></span>
               <strong>THE<br />KITCHEN</strong>
-              <p>Add new comparisons, check what is live, and keep the sauce shelf in order.</p>
+              <p>The cook zone. Prepare, compare, and publish ScanSAUce styles as the menu grows.</p>
               <b>ENTER THE KITCHEN →</b>
             </button>
             <button class="room-card library-card" type="button" data-open-view="library">
               <span>02 / FILM CATALOGUE</span>
               <strong>THE<br />LIBRARY</strong>
-              <p>Build the film stock catalogue, example rolls, notes, and credits.</p>
+              <p>The Library is still under renovation, but feel free to look around.</p>
               <b>VIEW THE LIBRARY →</b>
             </button>
           </div>
@@ -98,10 +95,10 @@
         <section class="view-section" data-view="kitchen" hidden>
           <div class="room-heading">
             <div>
-              <p class="gate-index">01 / SCANSAUCE ROOM</p>
+              <p class="gate-index scan-room-index">01 / <img src="../assets/scansauce-logo.png" alt="ScanSAUce" /></p>
               <h2>THE KITCHEN</h2>
             </div>
-            <p>One frame, three dips. Add the matching Classic, Isle Punch, and Flat scans, then send them out when the plate looks right.</p>
+            <p>This is the cook zone. Add matching scans, check the comparison, and publish it to ScanSAUce when the plate looks right.</p>
           </div>
 
           <div class="admin-grid">
@@ -184,7 +181,7 @@
               <p class="gate-index">02 / FILM CATALOGUE ROOM</p>
               <h2>THE LIBRARY</h2>
             </div>
-            <p>The shelves are being planned now so film details and ScanSAUce examples can connect cleanly later.</p>
+            <p>The Library is still under renovation. The shelves are taking shape, so feel free to look around while we get everything ready.</p>
           </div>
 
           <div class="library-blueprint">
@@ -211,12 +208,12 @@
           </div>
           <div class="coming-soon">
             <strong>ROOM STATUS</strong>
-            <span>PLANNED / NOT YET ACCEPTING ENTRIES</span>
+            <span>UNDER RENOVATION / FEEL FREE TO LOOK AROUND</span>
           </div>
         </section>
       </main>
     </div>
 
-    <script src="admin.js"></script>
+    <script src="admin.js?v=3"></script>
   </body>
 </html>

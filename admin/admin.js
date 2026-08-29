@@ -10,7 +10,6 @@ const gatePasscode = document.querySelector("#gate-passcode");
 const gateResult = document.querySelector("#gate-result");
 const previewButton = document.querySelector("#preview-button");
 const adminShell = document.querySelector("#admin-shell");
-const sessionLabel = document.querySelector("#session-label");
 const lockButton = document.querySelector("#lock-button");
 const form = document.querySelector("#comparison-form");
 const dateInput = document.querySelector("#shoot-date");
@@ -60,7 +59,6 @@ function showView(name) {
 function unlockShell(session = {}, preview = false) {
   gateScreen.hidden = true;
   adminShell.hidden = false;
-  sessionLabel.textContent = preview ? "LOCAL PREVIEW" : (session.email || "BACK OF HOUSE");
   setStatus(
     preview ? "error" : "connected",
     preview ? "PREVIEW MODE" : "SAU ENGINE R2: ONLINE",

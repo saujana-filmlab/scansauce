@@ -110,11 +110,14 @@ button, input { font: inherit; }
   height: auto;
 }
 
+.admin-header .admin-house-logo {
+  width: min(350px, 48vw);
+  filter: brightness(0) saturate(100%) invert(87%) sepia(18%) saturate(665%) hue-rotate(326deg) brightness(105%) contrast(93%);
+}
+
 .header-tools { display: flex; align-items: center; gap: 18px; text-align: right; }
-.header-tools > div { text-align: right; }
 .admin-header p, .admin-header h1 { margin: 0; }
 .admin-header p { color: var(--muted); font: 700 10px/1.4 var(--mono); letter-spacing: 0.12em; }
-.header-tools strong { display: block; color: var(--accent); font-size: clamp(18px, 2.5vw, 30px); line-height: 0.95; }
 #lock-button { padding: 10px 13px; color: var(--muted); background: transparent; border: 1px solid var(--line); font: 700 9px/1 var(--mono); cursor: pointer; }
 
 .room-nav { display: flex; gap: 0; padding: 0 clamp(18px, 4vw, 60px); border-bottom: 1px solid var(--line); }
@@ -160,6 +163,13 @@ main { width: min(1440px, 100%); margin: 0 auto; padding: 28px clamp(18px, 4vw, 
 .room-card { min-height: 430px; padding: clamp(24px, 4vw, 48px); color: var(--paper); background: var(--panel); border: 1px solid var(--line); text-align: left; cursor: pointer; }
 .room-card:hover { border-color: var(--accent); transform: translateY(-2px); }
 .room-card > span { color: var(--accent); font: 700 9px/1.4 var(--mono); letter-spacing: 0.12em; }
+.scan-room-index { display: flex; align-items: center; gap: 8px; }
+.scan-room-index img {
+  display: block;
+  width: 104px;
+  height: auto;
+  filter: brightness(0) saturate(100%) invert(51%) sepia(87%) saturate(2846%) hue-rotate(338deg) brightness(101%) contrast(101%);
+}
 .room-card > strong { display: block; margin-top: 28px; font-size: clamp(55px, 8vw, 96px); line-height: 0.82; letter-spacing: -0.06em; }
 .room-card p { max-width: 430px; margin: 32px 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
 .room-card b { display: block; margin-top: auto; color: var(--paper); font: 700 10px/1 var(--mono); letter-spacing: 0.08em; }
@@ -258,7 +268,7 @@ progress { width: 100%; height: 6px; margin-top: 18px; accent-color: var(--accen
 
 @media (max-width: 620px) {
   .admin-header { align-items: flex-start; }
-  .header-tools > div { display: none; }
+  .header-tools > p { display: none; }
   .room-nav { overflow-x: auto; }
   .room-nav button { flex: 0 0 auto; }
   .gate-card form { grid-template-columns: 1fr; }
