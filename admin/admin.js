@@ -63,8 +63,8 @@ function unlockShell(session = {}, preview = false) {
   sessionLabel.textContent = preview ? "LOCAL PREVIEW" : (session.email || "BACK OF HOUSE");
   setStatus(
     preview ? "error" : "connected",
-    preview ? "PREVIEW MODE" : "R2 CONNECTED",
-    preview ? "The rooms are visible, but publishing stays locked until the Worker and R2 are connected." : "The Kitchen is ready for authenticated uploads.",
+    preview ? "PREVIEW MODE" : "SAU ENGINE R2: ONLINE",
+    preview ? "Have a look around. Publishing stays off until the Sau Engine is connected." : "The Kitchen is ready for some cooking.",
   );
   showView("lobby");
   loadManifest();
@@ -160,11 +160,11 @@ function renderList() {
 
 async function removeComparison(id, label, button) {
   if (!adminPasscode) {
-    setResult("Enter the production passcode before removing a frame.", "error");
+    setResult("Open the door with the passcode before removing a frame.", "error");
     return;
   }
 
-  const confirmed = window.confirm(`Remove frame ${label}? Its processed photos will also be deleted from R2.`);
+  const confirmed = window.confirm(`Remove frame ${label}? It will disappear from ScanSAUce and its image files will be cleared too.`);
   if (!confirmed) return;
 
   button.disabled = true;
@@ -179,7 +179,7 @@ async function removeComparison(id, label, button) {
     const saved = await response.json();
     manifest = saved.manifest;
     renderList();
-    setResult(`Frame ${label} and its processed photos have been removed.`, "success");
+    setResult(`Frame ${label} is off the menu and its image files have been cleared.`, "success");
   } catch (error) {
     button.disabled = false;
     button.textContent = "REMOVE";
@@ -196,7 +196,7 @@ list.addEventListener("click", (event) => {
 async function loadManifest() {
   try {
     const response = await fetch(CONTENT_URL, { cache: "no-store" });
-    if (!response.ok) throw new Error(`Could not load the content manifest (${response.status})`);
+    if (!response.ok) throw new Error(`Could not check the live frame list (${response.status})`);
     manifest = await response.json();
     renderList();
   } catch (error) {
@@ -321,7 +321,7 @@ form.addEventListener("change", (event) => {
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (!adminPasscode) {
-    setResult("Lock the room, then enter the production passcode before uploading.", "error");
+    setResult("Open the door with the passcode before adding a new frame.", "error");
     return;
   }
 
@@ -340,7 +340,7 @@ form.addEventListener("submit", async (event) => {
   publishButton.disabled = true;
   progress.hidden = false;
   progress.value = 0;
-  setResult("Preparing the three scans for R2.");
+  setResult("Warming up the Kitchen and prepping all three scans.");
 
   try {
     const styles = {};
@@ -348,7 +348,7 @@ form.addEventListener("submit", async (event) => {
     const onStep = () => {
       completedSteps += 1;
       progress.value = Math.round((completedSteps / totalSteps) * 100);
-      setResult(`Uploaded ${completedSteps} of ${totalSteps} web image variants.`);
+      setResult(`Prepped ${completedSteps} of ${totalSteps} image sizes.`);
     };
 
     for (const style of STYLES) {
