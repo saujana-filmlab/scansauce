@@ -30,6 +30,8 @@ const leftData = document.querySelector("#data-left");
 const rightData = document.querySelector("#data-right");
 const sceneData = document.querySelector("#data-scene");
 const sceneThumbs = document.querySelector("#scene-thumbs");
+const scenePrev = document.querySelector("#scene-prev");
+const sceneNext = document.querySelector("#scene-next");
 const styleButtons = [...document.querySelectorAll("[data-side][data-style]")];
 
 let sceneButtons = [];
@@ -179,12 +181,24 @@ function makeSceneButton(scene, index) {
   return button;
 }
 
+function updateSceneRailControls() {
+  const maxScroll = Math.max(0, sceneThumbs.scrollWidth - sceneThumbs.clientWidth);
+  scenePrev.disabled = sceneThumbs.scrollLeft <= 2;
+  sceneNext.disabled = sceneThumbs.scrollLeft >= maxScroll - 2;
+}
+
+function scrollSceneRail(direction) {
+  const distance = Math.max(170, Math.round(sceneThumbs.clientWidth * 0.8));
+  sceneThumbs.scrollBy({ left: direction * distance, behavior: "smooth" });
+}
+
 function renderScenes(comparisons) {
   scenes.clear();
   comparisons.forEach((scene) => scenes.set(scene.id, scene));
   sceneButtons = comparisons.map(makeSceneButton);
   sceneThumbs.replaceChildren(...sceneButtons);
   setScene(comparisons[0].id);
+  requestAnimationFrame(updateSceneRailControls);
 }
 
 async function loadContent() {
@@ -249,8 +263,14 @@ styleButtons.forEach((button) => {
   button.addEventListener("click", () => setStyle(button.dataset.side, button.dataset.style));
 });
 
+scenePrev.addEventListener("click", () => scrollSceneRail(-1));
+sceneNext.addEventListener("click", () => scrollSceneRail(1));
+sceneThumbs.addEventListener("scroll", updateSceneRailControls, { passive: true });
+window.addEventListener("resize", updateSceneRailControls);
+
 setPosition(50);
 loadContent().catch((error) => {
   console.error(error);
   sceneThumbs.innerHTML = '<p class="content-error">Comparison photos are temporarily unavailable.</p>';
+  updateSceneRailControls();
 });

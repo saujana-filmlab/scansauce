@@ -232,7 +232,16 @@ progress { width: 100%; height: 6px; margin-top: 18px; accent-color: var(--accen
 .form-result.is-error { color: var(--danger); }
 .form-result.is-success { color: var(--success); }
 
-.comparison-list { display: grid; gap: 8px; }
+.comparison-list {
+  display: grid;
+  gap: 8px;
+  max-height: clamp(340px, 58vh, 680px);
+  padding-right: 6px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: var(--muted) transparent;
+  scrollbar-width: thin;
+}
 .comparison-item { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px; background: var(--ink); border: 1px solid var(--line); }
 .comparison-item strong, .comparison-item span { display: block; }
 .comparison-item strong { font-size: 14px; }

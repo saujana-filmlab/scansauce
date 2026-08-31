@@ -49,7 +49,7 @@
       imagesizes="(max-width: 720px) 94vw, (max-width: 1100px) 64vw, 680px"
       type="image/webp"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=2" />
   </head>
   <body>
     <header class="site-header">
@@ -91,7 +91,11 @@
         <div class="comparison-layout">
           <div class="scene-rail" aria-label="Choose a photograph">
             <span class="rail-label">FRAME SELECT</span>
-            <div id="scene-thumbs"></div>
+            <div class="scene-rail-controls">
+              <button class="scene-arrow" id="scene-prev" type="button" aria-label="Show previous frames" aria-controls="scene-thumbs" disabled>←</button>
+              <div id="scene-thumbs"></div>
+              <button class="scene-arrow" id="scene-next" type="button" aria-label="Show more frames" aria-controls="scene-thumbs" disabled>→</button>
+            </div>
           </div>
 
           <div class="comparison-frame" id="comparison-frame">
@@ -233,6 +237,6 @@
       </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=2"></script>
   </body>
 </html>
