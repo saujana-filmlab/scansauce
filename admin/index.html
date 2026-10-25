@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#180b06" />
     <title>The Sau House | Saujana Content System</title>
     <link rel="icon" type="image/png" href="../assets/scansauce-thumbnail.png" />
-    <link rel="stylesheet" href="admin.css?v=4" />
+    <link rel="stylesheet" href="admin.css?v=5" />
   </head>
   <body>
     <svg class="filter-definitions" aria-hidden="true" width="0" height="0">
@@ -58,6 +58,7 @@
 
       <nav class="room-nav" aria-label="Admin rooms">
         <button type="button" data-open-view="lobby">THE HOUSE</button>
+        <button type="button" data-open-view="map">THE MAP</button>
         <button type="button" data-open-view="kitchen">THE KITCHEN</button>
         <button type="button" data-open-view="library">THE LIBRARY</button>
       </nav>
@@ -77,6 +78,12 @@
             <h2>WHERE ARE<br />WE WORKING?</h2>
           </div>
           <div class="room-grid">
+            <button class="room-card map-card" type="button" data-open-view="map">
+              <span>00 / SAUJANA SYSTEMS</span>
+              <strong>THE<br />MAP</strong>
+              <p>One place to find the sites, apps, customer paths, and projects across Bali and KL.</p>
+              <b>OPEN THE MAP →</b>
+            </button>
             <button class="room-card kitchen-card" type="button" data-open-view="kitchen">
               <span class="scan-room-index">01 / <img src="../assets/scansauce-logo.png" alt="ScanSAUce" /></span>
               <strong>THE<br />KITCHEN</strong>
@@ -90,6 +97,66 @@
               <b>VIEW THE LIBRARY →</b>
             </button>
           </div>
+        </section>
+
+        <section class="view-section" data-view="map" hidden>
+          <div class="room-heading map-heading">
+            <div>
+              <p class="gate-index">00 / THE WHOLE HOUSE</p>
+              <h2>THE MAP</h2>
+            </div>
+            <p>Every Saujana build gets a place, a stage, and a next step. Open the right tool from here, or update its record as the work moves.</p>
+          </div>
+
+          <div class="map-stats" aria-label="House map summary">
+            <div><strong id="map-total">—</strong><span>ON THE MAP</span></div>
+            <div><strong id="map-published">—</strong><span>PUBLISHED</span></div>
+            <div><strong id="map-in-progress">—</strong><span>IN PROGRESS</span></div>
+            <div><strong id="map-to-check">—</strong><span>TO CHECK</span></div>
+          </div>
+
+          <div class="map-journey">
+            <div>
+              <span>THE BALI CUSTOMER PATH</span>
+              <p>Send Your Film or customer registration → Bali Dispatch → processing and scanning → Bali scan delivery. The film care policy supports the journey as a reference.</p>
+            </div>
+            <div>
+              <span>WHO OWNS THE DATA</span>
+              <p>Dispatch holds lab orders and customer records. Spool holds POS activity. The Sau House holds content and this project map.</p>
+            </div>
+          </div>
+
+          <div class="map-toolbar">
+            <label class="map-search"><span>FIND A BUILD</span><input id="map-search" type="search" placeholder="Search sites, apps, or projects" /></label>
+            <label><span>PLACE</span><select id="map-place"><option value="">ALL PLACES</option><option>Bali</option><option>KL</option><option>Shared</option></select></label>
+            <label><span>AREA</span><select id="map-category"><option value="">ALL AREAS</option><option>Operations</option><option>Customer journey</option><option>Content</option><option>Presence</option><option>Projects</option></select></label>
+            <button id="map-add" type="button">ADD A BUILD +</button>
+          </div>
+          <p class="map-feedback" id="map-feedback" role="status" aria-live="polite">Opening the House map.</p>
+          <div class="map-grid" id="map-grid"></div>
+
+          <section class="map-editor" id="map-editor" aria-labelledby="map-editor-title" hidden>
+            <div class="map-editor-head">
+              <div><p class="gate-index">HOUSE RECORD</p><h3 id="map-editor-title">EDIT BUILD</h3></div>
+              <button id="map-editor-close" type="button" aria-label="Close editor">CLOSE ×</button>
+            </div>
+            <form id="map-form">
+              <div class="map-form-grid">
+                <label><span>NAME</span><input name="name" type="text" maxlength="100" required /></label>
+                <label><span>PLACE</span><select name="place" required><option>Bali</option><option>KL</option><option>Shared</option></select></label>
+                <label><span>AREA</span><select name="category" required><option>Operations</option><option>Customer journey</option><option>Content</option><option>Presence</option><option>Projects</option></select></label>
+                <label><span>STAGE</span><select name="stage" required><option>Published</option><option>Base built</option><option>Building</option><option>Planned</option><option>Needs review</option><option>Paused</option><option>Archived</option></select></label>
+                <label class="map-wide"><span>WHAT IT DOES</span><input name="summary" type="text" maxlength="240" /></label>
+                <label><span>OPEN URL</span><input name="url" type="url" placeholder="https://" /></label>
+                <label><span>SOURCE URL</span><input name="repo" type="url" placeholder="https://" /></label>
+                <label><span>OWNER</span><input name="owner" type="text" maxlength="100" placeholder="Add a name or team" /></label>
+                <label><span>LAST CHECKED</span><input name="checkedAt" type="date" /></label>
+                <label class="map-wide"><span>NEXT ACTION</span><input name="nextAction" type="text" maxlength="240" /></label>
+                <label class="map-wide"><span>NOTES</span><textarea name="note" maxlength="500" rows="3"></textarea></label>
+              </div>
+              <div class="map-form-actions"><span id="map-save-status" role="status" aria-live="polite"></span><button type="submit">SAVE RECORD</button></div>
+            </form>
+          </section>
         </section>
 
         <section class="view-section" data-view="kitchen" hidden>
@@ -214,6 +281,7 @@
       </main>
     </div>
 
-    <script src="admin.js?v=3"></script>
+    <script src="admin.js?v=5"></script>
+  <script src="house.js?v=3"></script>
   </body>
 </html>

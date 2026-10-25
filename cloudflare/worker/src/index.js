@@ -20,7 +20,12 @@ export default {
     }
 
     if (request.method === "GET" && url.pathname.startsWith("/content/media/")) {
-      const key = decodeURIComponent(url.pathname.slice("/content/media/".length));
+      let key;
+      try { key = decodeURIComponent(url.pathname.slice("/content/media/".length)); }
+      catch { return json({ error: "Media not found" }, 404); }
+      if (!/^scansauce\/comparisons\/\d{4}-\d{2}-\d{2}-\d{2}\/(?:classic|isle-punch|flat)\/(?:320|900|1600)\.webp$/.test(key)) {
+        return json({ error: "Media not found" }, 404);
+      }
       return serveObject(env, key);
     }
 
@@ -53,7 +58,7 @@ function commonHeaders() {
   return {
     "Access-Control-Allow-Origin": "https://scansauce.saujanalab.com",
     "Access-Control-Allow-Headers": "Authorization, Content-Type",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
     "X-Content-Type-Options": "nosniff",
   };
 }

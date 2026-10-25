@@ -88,6 +88,10 @@ test("uploads a complete comparison and serves its manifest", async () => {
   const manifest = await manifestResponse.json();
   assert.equal(manifest.comparisons.length, 1);
   assert.equal(manifest.comparisons[0].styles.flat.variants["1600"].webp, "https://scansauce.saujanalab.com/content/media/scansauce/comparisons/2026-08-28-04/flat/1600.webp");
+  const publicImage = await worker.fetch(new Request(manifest.comparisons[0].styles.flat.variants["1600"].webp), env);
+  assert.equal(publicImage.status, 200);
+  const privatePath = await worker.fetch(new Request("https://scansauce.saujanalab.com/content/media/private/secret.json"), env);
+  assert.equal(privatePath.status, 404);
 
   const remove = await worker.fetch(adminRequest("/api/admin/comparisons/2026-08-28-04", {
     method: "DELETE",

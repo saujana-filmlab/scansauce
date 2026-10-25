@@ -1,4 +1,6 @@
-const WORKER_ORIGIN = "https://scansauce-content.saujanalab-bali.workers.dev";
+const WORKER_ORIGIN = ["saujana-house.pages.dev", "house.saujanalab.com"].includes(window.location.hostname)
+  ? "https://saujana-house-api.edue-christian.workers.dev"
+  : "https://scansauce-content.saujanalab-bali.workers.dev";
 const API_BASE = `${WORKER_ORIGIN}/api/admin`;
 const CONTENT_URL = `${WORKER_ORIGIN}/content/comparisons.json`;
 const STYLES = ["classic", "isle-punch", "flat"];
@@ -66,6 +68,7 @@ function unlockShell(session = {}, preview = false) {
   );
   showView("lobby");
   loadManifest();
+  document.dispatchEvent(new CustomEvent("sau-house:unlocked", { detail: { preview } }));
 }
 
 async function verifyPasscode(passcode) {
@@ -108,6 +111,7 @@ lockButton.addEventListener("click", () => {
   gateScreen.hidden = false;
   gateResult.textContent = "";
   gatePasscode.focus();
+  document.dispatchEvent(new Event("sau-house:locked"));
 });
 
 viewButtons.forEach((button) => button.addEventListener("click", () => showView(button.dataset.openView)));

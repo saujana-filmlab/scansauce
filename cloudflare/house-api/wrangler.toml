@@ -1,0 +1,13 @@
+name = "saujana-house-api"
+main = "src/index.js"
+compatibility_date = "2026-10-25"
+workers_dev = true
+preview_urls = false
+
+[[d1_databases]]
+binding = "DB"
+database_name = "saujana-house"
+database_id = "83d34aa8-a0d4-4b31-9c09-31474507b90f"
+
+[vars]
+BACKEND_ORIGIN = "https://scansauce-content.saujanalab-bali.workers.dev"

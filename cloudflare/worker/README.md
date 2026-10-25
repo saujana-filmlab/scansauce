@@ -24,4 +24,6 @@ This Worker keeps the public ScanSAUce site static while providing a small authe
 9. The public and admin pages connect to `https://scansauce-content.saujanalab-bali.workers.dev` because the Worker and `saujanalab.com` zone are in different Cloudflare accounts.
 10. If Cloudflare Access is added later, set `REQUIRE_ACCESS = "true"` and restrict Access to the Saujana admin email addresses.
 
+The House Map has a separate API in `../house-api/`. It verifies the same admin passcode against this Worker and stores staff edits in its own private D1 database.
+
 Do not expose R2 API credentials or the admin passcode in the GitHub repository or browser JavaScript.
